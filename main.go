@@ -68,15 +68,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/*key, err := handler.HashPassword(*passphare)
-	if err != nil {
-		log.Fatalf("ошибка, не удалось получить хеш от пароля: %v", err)
-	}*/
-
-	/*if handler.CheckPasswordHash(*passphare, key) {
-		log.Fatal("ошибка: указан не верный пароль", err)
-	}*/
-
 	// читаем данные файла в переменную
 	fData, err := readFileData(*path)
 	if err != nil {
