@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const appVersion string = "File-hasher;1.0;AES256\n"
+const appVersion string = "File-encryptor;1.0;AES256\n"
 
 func readFileData(fileName string) (string, error) {
 	bytes, err := ioutil.ReadFile(fileName)
