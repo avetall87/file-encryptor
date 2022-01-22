@@ -53,6 +53,26 @@ func validateParameterData(path string, passphare string, encrypt bool, decrytp 
 	}
 }
 
+func encryptAndSave(passphare string, str string, path string) {
+	aesData, err := handler.EncryptAES([]byte(handler.GetMD5Hash(passphare)), []byte(str))
+	if err != nil {
+		log.Fatal("ошибка: не получилось зашифровать данные из файла - ", err)
+	}
+	rewriteFileData(path, []byte(appVersion+aesData))
+}
+
+func decryptAndSave(passphare string, str string, path string) {
+	i := strings.Index(str, "\n")
+	processedData := str[i:]
+
+	data, err := handler.DecryptAES([]byte(handler.GetMD5Hash(passphare)), processedData)
+
+	if err != nil {
+		log.Fatal("ошибка: не получилось расшифровать данные из файла - ", err)
+	}
+	rewriteFileData(path, []byte(data))
+}
+
 func main() {
 
 	path := flag.String("path", "", "путь к файлу")
@@ -75,22 +95,10 @@ func main() {
 	}
 
 	if *encrypt {
-		aesData, err := handler.EncryptAES([]byte(handler.GetMD5Hash(*passphare)), []byte(fData))
-		if err != nil {
-			log.Fatal("ошибка: не получилось зашифровать данные из файла - ", err)
-		}
-		rewriteFileData(*path, []byte(appVersion+aesData))
+		encryptAndSave(*passphare, fData, *path)
 	}
 
 	if *decrypt {
-		i := strings.Index(fData, "\n")
-		processedData := fData[i:]
-
-		data, err := handler.DecryptAES([]byte(handler.GetMD5Hash(*passphare)), processedData)
-
-		if err != nil {
-			log.Fatal("ошибка: не получилось расшифровать данные из файла - ", err)
-		}
-		rewriteFileData(*path, []byte(data))
+		decryptAndSave(*passphare, fData, *path)
 	}
 }
