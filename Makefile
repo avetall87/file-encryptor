@@ -4,6 +4,9 @@ build:
 	rm -rf bin
 	go build -o bin/file-encryptor .
 
+format:
+	gofmt -w ./
+
 test:
 	go test -v ./
 
